@@ -17,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -50,12 +51,12 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "请输入数据", Toast.LENGTH_SHORT).show();
             } else {
                 exec.execute(() -> {
-                    DataOutputStream dos;
+                    PrintWriter pw;
                     BufferedReader bufferedReader;
                     try {
-                        dos = new DataOutputStream(clientSocket.getOutputStream());
+                        pw = new PrintWriter(clientSocket.getOutputStream());
                         Log.d("tcpSendToHost", sendTcpTxt.getText().toString());
-                        dos.write(sendTcpTxt.getText().toString().getBytes());
+                        pw.print(sendTcpTxt.getText().toString());
 
                         bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                         String message;
