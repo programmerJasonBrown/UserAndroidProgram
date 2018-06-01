@@ -26,7 +26,7 @@
                 android:id="@+id/ipEditText"
                 android:layout_width="200dp"
                 android:layout_height="42dp"
-                android:text="192.168.1.100"
+                android:text="192.168.137.1"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="16dp" />
 
@@ -43,7 +43,7 @@
                 android:layout_weight="30"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:text="3000" />
+                android:text="10008" />
         </LinearLayout>
 
         <LinearLayout
@@ -55,7 +55,7 @@
                 android:id="@+id/sendTcpTxt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="hello TCP!" />
+                android:text="111" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -89,8 +89,8 @@
 
         <ImageView
             android:id="@+id/qR_img"
-            android:layout_width="264dp"
-            android:layout_height="285dp"
+            android:layout_width="333dp"
+            android:layout_height="332dp"
             android:layout_gravity="center"
             android:src="@mipmap/ic_launcher" />
 

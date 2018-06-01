@@ -56,7 +56,9 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         pw = new PrintWriter(clientSocket.getOutputStream());
                         Log.d("tcpSendToHost", sendTcpTxt.getText().toString());
-                        pw.print(sendTcpTxt.getText().toString());
+                        pw.println(sendTcpTxt.getText().toString());
+                        pw.flush();
+
 
                         bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                         String message;
