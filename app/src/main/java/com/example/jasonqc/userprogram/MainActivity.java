@@ -1,9 +1,9 @@
 package com.example.jasonqc.userprogram;
 
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -14,7 +14,6 @@ import android.widget.Toast;
 import com.example.jasonqc.userprogram.utils.ZXingUtils;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -44,8 +43,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sendTcpData(View view) {
+        connectToTcpHost();
+        while (clientSocket == null) {
+
+        }
         if (clientSocket == null) {
-            Toast.makeText(this, "请先建立连接", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "请联网", Toast.LENGTH_SHORT).show();
         } else {
             if (TextUtils.isEmpty(sendTcpTxt.getText())) {
                 Toast.makeText(this, "请输入数据", Toast.LENGTH_SHORT).show();
@@ -69,6 +72,9 @@ public class MainActivity extends AppCompatActivity {
                                 Bitmap bitmap = ZXingUtils.createQRImage(finalMessage, qR_img.getWidth(), qR_img.getHeight());
                                 qR_img.setImageBitmap(bitmap);
                             });
+
+                            clientSocket.close();
+                            break;
                         }
 
                     } catch (IOException e) {
@@ -78,8 +84,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-    public void disconnectToTcpHost(View view) {
+    /*断开连接，不需要了*/
+   /* public void disconnectToTcpHost(View view) {
         try {
             if (clientSocket == null)
                 return;
@@ -89,9 +95,13 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     public void connectToTcpHost(View view) {
+        connectToTcpHost();
+    }
+
+    public void connectToTcpHost() {
         if (TextUtils.isEmpty(ipEditText.getText()) || TextUtils.isEmpty(portEditText.getText())) {
             Toast.makeText(this, "请输入ip 和 port", Toast.LENGTH_SHORT).show();
         } else {
@@ -100,12 +110,12 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     clientSocket = new Socket(ipEditText.getText().toString(), Integer.parseInt(portEditText.getText().toString()));
                     Log.d("connectToTcpHost", String.valueOf(clientSocket.isConnected()));
-                    uiHandler.post(() -> {
-                        if (clientSocket.isConnected())
-                            Toast.makeText(getApplicationContext(), "TCP连接成功", Toast.LENGTH_SHORT).show();
-                        else
-                            Toast.makeText(getApplicationContext(), "TCP连接失败", Toast.LENGTH_SHORT).show();
-                    });
+//                    uiHandler.post(() -> {
+//                        if (clientSocket.isConnected())
+//                            Toast.makeText(getApplicationContext(), "TCP连接成功", Toast.LENGTH_SHORT).show();
+//                        else
+//                            Toast.makeText(getApplicationContext(), "TCP连接失败", Toast.LENGTH_SHORT).show();
+//                    });
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
