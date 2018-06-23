@@ -37,9 +37,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         qR_img = findViewById(R.id.qR_img);
-        sendTcpTxt = findViewById(R.id.sendTcpTxt);
-        ipEditText = findViewById(R.id.ipEditText);
-        portEditText = findViewById(R.id.portEditText);
+//        sendTcpTxt = findViewById(R.id.sendTcpTxt);
+//        ipEditText = findViewById(R.id.ipEditText);
+//        portEditText = findViewById(R.id.portEditText);
     }
 
     public void sendTcpData(View view) {
@@ -50,40 +50,38 @@ public class MainActivity extends AppCompatActivity {
         if (clientSocket == null) {
             Toast.makeText(this, "请联网", Toast.LENGTH_SHORT).show();
         } else {
-            if (TextUtils.isEmpty(sendTcpTxt.getText())) {
-                Toast.makeText(this, "请输入数据", Toast.LENGTH_SHORT).show();
-            } else {
-                exec.execute(() -> {
-                    PrintWriter pw;
-                    BufferedReader bufferedReader;
-                    try {
-                        pw = new PrintWriter(clientSocket.getOutputStream());
-                        Log.d("tcpSendToHost", sendTcpTxt.getText().toString());
-                        pw.println(sendTcpTxt.getText().toString());
-                        pw.flush();
+            exec.execute(() -> {
+                PrintWriter pw;
+                BufferedReader bufferedReader;
+                try {
+                    pw = new PrintWriter(clientSocket.getOutputStream());
+//                    Log.d("tcpSendToHost", sendTcpTxt.getText().toString());
+                    pw.println("13072530211");
+                    pw.flush();
 
 
-                        bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                        String message;
-                        while ((message = bufferedReader.readLine()) != null) {
-                            Log.d("message", message);
-                            String finalMessage = message.trim();
-                            uiHandler.post(() -> {
-                                Bitmap bitmap = ZXingUtils.createQRImage(finalMessage, qR_img.getWidth(), qR_img.getHeight());
-                                qR_img.setImageBitmap(bitmap);
-                            });
+                    bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                    String message;
+                    while ((message = bufferedReader.readLine()) != null) {
+                        Log.d("message", message);
+                        String finalMessage = message.trim();
+                        uiHandler.post(() -> {
+                            Bitmap bitmap = ZXingUtils.createQRImage(finalMessage, qR_img.getWidth(), qR_img.getHeight());
+                            qR_img.setImageBitmap(bitmap);
+                        });
 
-                            clientSocket.close();
-                            break;
-                        }
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        clientSocket.close();
+                        break;
                     }
-                });
-            }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         }
     }
+
+//}
     /*断开连接，不需要了*/
    /* public void disconnectToTcpHost(View view) {
         try {
@@ -102,24 +100,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void connectToTcpHost() {
-        if (TextUtils.isEmpty(ipEditText.getText()) || TextUtils.isEmpty(portEditText.getText())) {
-            Toast.makeText(this, "请输入ip 和 port", Toast.LENGTH_SHORT).show();
-        } else {
-            Log.d("connectToTcpHost", ipEditText.getText().toString() + "," + portEditText.getText().toString());
-            exec.execute(() -> {
-                try {
-                    clientSocket = new Socket(ipEditText.getText().toString(), Integer.parseInt(portEditText.getText().toString()));
-                    Log.d("connectToTcpHost", String.valueOf(clientSocket.isConnected()));
+//        if (TextUtils.isEmpty(ipEditText.getText()) || TextUtils.isEmpty(portEditText.getText())) {
+//            Toast.makeText(this, "请输入ip 和 port", Toast.LENGTH_SHORT).show();
+//        } else {
+//            Log.d("connectToTcpHost", ipEditText.getText().toString() + "," + portEditText.getText().toString());
+        exec.execute(() -> {
+            try {
+//                clientSocket = new Socket("10.0.0.238", 10008);
+                clientSocket = new Socket("192.168.3.117", 3000);
+
+                Log.d("connectToTcpHost", String.valueOf(clientSocket.isConnected()));
 //                    uiHandler.post(() -> {
 //                        if (clientSocket.isConnected())
 //                            Toast.makeText(getApplicationContext(), "TCP连接成功", Toast.LENGTH_SHORT).show();
 //                        else
 //                            Toast.makeText(getApplicationContext(), "TCP连接失败", Toast.LENGTH_SHORT).show();
 //                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-        }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
+//    }
 }
